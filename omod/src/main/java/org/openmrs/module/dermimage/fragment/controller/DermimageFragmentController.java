@@ -1,16 +1,11 @@
-package org.openmrs.module.skinhelpdesk.fragment.controller;
+package org.openmrs.module.dermimage.fragment.controller;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.openmrs.Patient;
 import org.openmrs.api.PatientService;
-import org.openmrs.api.context.Context;
-import org.openmrs.module.skinhelpdesk.SkinHelpDesk;
-import org.openmrs.module.skinhelpdesk.api.SkinHelpDeskService;
-import org.openmrs.ui.framework.SimpleObject;
 import org.openmrs.ui.framework.annotation.SpringBean;
-import org.openmrs.ui.framework.fragment.*;
-
-import org.springframework.web.bind.annotation.RequestParam;
+import org.openmrs.ui.framework.fragment.FragmentConfiguration;
+import org.openmrs.ui.framework.fragment.FragmentModel;
 
 
 /**
