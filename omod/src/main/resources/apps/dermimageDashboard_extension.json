@@ -1,0 +1,10 @@
+[
+  { // adds lesionmap section to patient dashboard
+    "id": "dermimage.dashboard",
+    "extensionPointId": "patientDashboard.secondColumnFragments",
+    "extensionParams": {
+      "provider": "dermimage",
+      "fragment": "dermimage"
+    }
+  }
+]
