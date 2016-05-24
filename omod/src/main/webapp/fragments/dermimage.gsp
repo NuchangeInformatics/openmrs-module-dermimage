@@ -29,6 +29,7 @@
 
        jq("#but_capture").click(function (e) {
            jq("#webcam").toggle();
+           jq("#myCanvas").toggle();
            jq("#but_webcam_upload").toggle();
            jq("#but_upload").toggle();
        });
@@ -48,7 +49,7 @@
            onSave: function () {
            },
            onCapture: function () {
-                webcam.save('../../ms/uiframework/resource/dermimage/scripts/jscam.php');
+                webcam.save('${ ui.actionLink("saveWebcam")}');
            },
            debug: function () {
            },
