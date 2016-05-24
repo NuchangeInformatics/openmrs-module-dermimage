@@ -3,9 +3,9 @@
 %>
 
 <style type="text/css">
-#webcam, #myCanvas {
+#webcam {
     width: 320px;
-    border:20px solid #009384;
+    border:5px solid #009384;
     background:#009384;
     -webkit-border-radius: 20px;
     -moz-border-radius: 20px;
@@ -24,6 +24,20 @@
 <script>
     var jq = jQuery;
    jq(document).ready(function() {
+       jq("#webcam").hide();
+       jq("#but_webcam_upload").hide();
+
+       jq("#but_capture").click(function (e) {
+           jq("#webcam").toggle();
+           jq("#but_webcam_upload").toggle();
+           jq("#but_upload").toggle();
+       });
+
+
+       jq("#but_webcam_upload").click(function (e) {
+           webcam.capture();
+        });
+
        jq("#webcam").webcam({
            width: 320,
            height: 240,
@@ -34,6 +48,7 @@
            onSave: function () {
            },
            onCapture: function () {
+                webcam.save('../../ms/uiframework/resource/dermimage/scripts/jscam.php');
            },
            debug: function () {
            },
