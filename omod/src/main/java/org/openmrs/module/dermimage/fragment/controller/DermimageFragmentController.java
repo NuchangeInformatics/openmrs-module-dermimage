@@ -3,9 +3,11 @@ package org.openmrs.module.dermimage.fragment.controller;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.openmrs.Patient;
 import org.openmrs.api.PatientService;
+import org.openmrs.api.context.Context;
 import org.openmrs.ui.framework.annotation.SpringBean;
 import org.openmrs.ui.framework.fragment.FragmentConfiguration;
 import org.openmrs.ui.framework.fragment.FragmentModel;
+import org.springframework.web.bind.annotation.RequestParam;
 
 
 /**
@@ -33,5 +35,24 @@ public class DermimageFragmentController {
         }
         model.addAttribute("patient", patient);
      }
+
+
+    /**
+     *
+     * @param identifier PatientId
+     * @param imagemap as String
+     * @return Object with Message: Added
+     * @should return object with the message added
+     */
+
+    public Object saveWebcam(@RequestParam("patientId") int identifier,
+                         @RequestParam("imagemap") String imagemap) {
+
+        String patientId = Integer.toString(identifier);
+        Object o = null;
+        String m;
+
+        return o;
+    }
 
 }
