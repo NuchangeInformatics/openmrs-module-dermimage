@@ -21,10 +21,24 @@
 
 
 </style>
+<h3>${debug}</h3>
 <script>
     var jq = jQuery;
     var image_pointer = 0;
+    var folder = ${folder};
+    var files = ${listOfFiles};
+    var num_files = ${numberOfFiles};
 
+    //Ref: http://www.williammalone.com/briefs/how-to-draw-image-html5-canvas/
+    function drawImage() {
+        var context = document.getElementById('myCanvas').getContext("2d");
+
+        var img = new Image();
+        img.onload = function () {
+            context.drawImage(img, 0, 0, 320, 240);
+        };
+        img.src = folder+files[image_pointer];
+    }
     jq(document).ready(function () {
         jq("#webcam").hide();
         jq("#but_webcam_upload").hide();

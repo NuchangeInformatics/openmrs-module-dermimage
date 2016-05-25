@@ -3,9 +3,7 @@ package org.openmrs.module.dermimage.fragment.controller;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.io.FileUtils;
 import org.openmrs.Patient;
-
 import org.openmrs.api.PatientService;
-import org.openmrs.api.context.Context;
 import org.openmrs.ui.framework.SimpleObject;
 import org.openmrs.ui.framework.annotation.SpringBean;
 import org.openmrs.ui.framework.fragment.FragmentConfiguration;
@@ -19,6 +17,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 
 
@@ -40,25 +39,23 @@ public class DermimageFragmentController {
         Object pt = config.getAttribute("patient");
         if (pt == null) {
             patient = patientService.getPatient((Integer) config.getAttribute("patientId"));
-        }
-        else {
+        } else {
             // in case we are passed a PatientDomainWrapper (but this module doesn't know about emrapi)
             patient = (Patient) (pt instanceof Patient ? pt : PropertyUtils.getProperty(pt, "patient"));
         }
-        model.addAttribute("patient", patient);
 
-        // Provide list of files in the folder
-        File folder = new File(OpenmrsUtil.getApplicationDataDirectory() + "/patient_images/"+patient.getId()+"/");
-        File[] listOfFiles = folder.listFiles();
-        ArrayList fileNames = new ArrayList();
-        for (File file : listOfFiles){
+        File imgDir = new File(OpenmrsUtil.getApplicationDataDirectory() + "/patient_images/" +
+                patient.getPatientId().toString().trim() + "/");
 
-           fileNames.add(file.getName());
-
+        if (!imgDir.exists()) {
+            FileUtils.forceMkdir(imgDir);
         }
-        model.addAttribute("folder", folder);
+        ArrayList<String> fileNames = new ArrayList<String>(Arrays.asList(imgDir.list()));
+        model.addAttribute("patient", patient);
+        model.addAttribute("folder", imgDir);
         model.addAttribute("listOfFiles", fileNames);
-        model.addAttribute("numberOfFiles", listOfFiles.length);
+        model.addAttribute("numberOfFiles", fileNames.size());
+
      }
 
 

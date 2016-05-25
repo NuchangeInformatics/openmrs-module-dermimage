@@ -69,3 +69,12 @@ put jetty-web.xml in openmrs/server/tmp/webapp/WEB-INF/jetty-web.xml with
 * File -> Project structure -> java folder as test src 
 * alt+enter on classname to create Test
 * add extends BaseModuleWebContextSensitiveTest 
+* ADD to webModuleApplicationContext.xml
+
+```
+<bean id="dermimageFragmentController"
+		  class="org.openmrs.module.dermimage.fragment.controller.DermimageFragmentController"/>
+		  
+```
+		  
+* Use text cases PatientId 2
