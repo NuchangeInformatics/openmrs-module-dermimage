@@ -44,4 +44,19 @@ main pom.xml
         </require_modules>
     
 ```
-        
+ 
+## jetty Form upload size limitation
+
+put jetty-web.xml in openmrs/server/tmp/webapp/WEB-INF/jetty-web.xml with
+```
+<Configure class="org.eclipse.jetty.webapp.WebAppContext">
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+  <!-- Max Form Size                                                   -->
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+  <Set name="maxFormContentSize">300000</Set>
+</Configure>
+```
+
+## Important
+
+jQuery.post requires returnFormat: 'json' 
