@@ -18,6 +18,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 
@@ -45,6 +46,19 @@ public class DermimageFragmentController {
             patient = (Patient) (pt instanceof Patient ? pt : PropertyUtils.getProperty(pt, "patient"));
         }
         model.addAttribute("patient", patient);
+
+        // Provide list of files in the folder
+        File folder = new File(OpenmrsUtil.getApplicationDataDirectory() + "/patient_images/"+patient.getId()+"/");
+        File[] listOfFiles = folder.listFiles();
+        ArrayList fileNames = new ArrayList();
+        for (File file : listOfFiles){
+
+           fileNames.add(file.getName());
+
+        }
+        model.addAttribute("folder", folder);
+        model.addAttribute("listOfFiles", fileNames);
+        model.addAttribute("numberOfFiles", listOfFiles.length);
      }
 
 
