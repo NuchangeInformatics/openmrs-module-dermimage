@@ -66,14 +66,14 @@
                         img.data[pos + 3] = 0xff;
                         pos += 4;
                     }
-
+                    var to_send = canvas.toDataURL("image/png").replace('data:image/png;base64,', '');
                     if (pos >= 4 * 320 * 240) {
                         ctx.putImageData(img, 0, 0);
                         jq.post("${ ui.actionLink("saveWebcam")}", {
                                     returnFormat: 'json',
                                     patientId: "${patient.id}",
                                     type: "data",
-                                    image: canvas.toDataURL("image/png")
+                                    image: to_send
                                 },
                                 function (data) {
                                     response = data.message;

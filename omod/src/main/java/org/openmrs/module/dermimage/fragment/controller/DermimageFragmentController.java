@@ -73,7 +73,7 @@ public class DermimageFragmentController {
                 }
                 String date = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(new Date());
                 FileOutputStream fos = new FileOutputStream(imgDir + "/"
-                        + date + ".jpg");
+                        + date + ".png");
                 fos.write(decodedBytes);
                 fos.close();
             } catch (IOException e) {
