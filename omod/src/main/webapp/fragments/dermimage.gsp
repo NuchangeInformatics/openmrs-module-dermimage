@@ -23,6 +23,8 @@
 </style>
 <script>
     var jq = jQuery;
+    var image_pointer = 0;
+
     jq(document).ready(function () {
         jq("#webcam").hide();
         jq("#but_webcam_upload").hide();
@@ -37,6 +39,19 @@
 
         jq("#but_webcam_upload").click(function (e) {
             webcam.capture();
+            jq("#but_capture").click();
+        });
+
+
+
+        jq("#but_left").click(function (e) {
+            if(image_pointer > 0) image_pointer--;
+            //drawImage();
+        });
+
+        jq("#but_right").click(function (e) {
+            if(image_pointer < num_files) image_pointer++;
+            //drawImage();
         });
 
         // Ref: http://www.xarg.org/project/jquery-webcam-plugin/
