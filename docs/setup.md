@@ -56,3 +56,7 @@ put jetty-web.xml in openmrs/server/tmp/webapp/WEB-INF/jetty-web.xml with
   <Set name="maxFormContentSize">300000</Set>
 </Configure>
 ```
+
+## Important
+
+jQuery.post requires returnFormat: 'json' 

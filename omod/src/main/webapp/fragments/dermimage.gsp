@@ -35,8 +35,6 @@
         });
 
 
-
-
         jq("#but_webcam_upload").click(function (e) {
             webcam.capture();
         });
@@ -72,16 +70,17 @@
                     if (pos >= 4 * 320 * 240) {
                         ctx.putImageData(img, 0, 0);
                         jq.post("${ ui.actionLink("saveWebcam")}", {
-                            patientID: "${patient.id}",
-                            type: "data",
-                            image: canvas.toDataURL("image/png")
-                        },
-                                function(data) {
+                                    returnFormat: 'json',
+                                    patientId: "${patient.id}",
+                                    type: "data",
+                                    image: canvas.toDataURL("image/png")
+                                },
+                                function (data) {
                                     response = data.message;
                                     jQuery("#responds").empty();
                                     jQuery("#responds").append(response);
                                 })
-                                .error(function() {
+                                .error(function () {
                                     //notifyError("Programmer error: delete identifier failed");
                                 });
                         pos = 0;
@@ -96,7 +95,12 @@
                     pos += 4 * 320;
 
                     if (pos >= 4 * 320 * 240) {
-                        jq.post("${ ui.actionLink("saveWebcam")}", {patientID: "${patient.id}", type: "pixel", image: image.join('|')});
+                        jq.post("${ ui.actionLink("saveWebcam")}", {
+                            returnFormat: 'json',
+                            patientID: "${patient.id}",
+                            type: "pixel",
+                            image: image.join('|')
+                        });
                         pos = 0;
                     }
                 };
@@ -120,7 +124,7 @@
                 }
             });
 
-          });
+        });
 
     });
 </script>
@@ -158,4 +162,7 @@
     <a class="button" id="but_delete">
         <i class="icon-remove"></i>
     </a>
+
+    <!-- Messages -->
+    <div id="responds"></div>
 </div>
