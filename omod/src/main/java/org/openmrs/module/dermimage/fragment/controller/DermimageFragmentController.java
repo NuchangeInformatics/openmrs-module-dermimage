@@ -4,6 +4,7 @@ import org.apache.commons.beanutils.PropertyUtils;
 import org.openmrs.Patient;
 import org.openmrs.api.PatientService;
 import org.openmrs.api.context.Context;
+import org.openmrs.ui.framework.SimpleObject;
 import org.openmrs.ui.framework.annotation.SpringBean;
 import org.openmrs.ui.framework.fragment.FragmentConfiguration;
 import org.openmrs.ui.framework.fragment.FragmentModel;
@@ -39,19 +40,29 @@ public class DermimageFragmentController {
 
     /**
      *
-     * @param identifier PatientId
-     * @param imagemap as String
+     * @param patientId as String
+     * @param type as String
+     * @param image as String
      * @return Object with Message: Added
      * @should return object with the message added
      */
 
-    public Object saveWebcam(@RequestParam("patientId") int identifier,
-                         @RequestParam("imagemap") String imagemap) {
+    public Object saveWebcam(@RequestParam("patientId") String patientId,
+                             @RequestParam("type") String type,
+                             @RequestParam("image") String image) {
+        /*
+        Log log = LogFactory.getLog(getClass());
+        if(type == "pixel"){
 
-        String patientId = Integer.toString(identifier);
-        Object o = null;
-        String m;
+        }else{
 
+        }
+        */
+        //Object o = null;
+        //SimpleObject buff = new SimpleObject();
+        SimpleObject o = SimpleObject.create("message","test");
+        //String m;
+        //log.info(o);
         return o;
     }
 
