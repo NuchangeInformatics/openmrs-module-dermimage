@@ -18,8 +18,6 @@
     margin-bottom: 50px;
 }
 
-
-
 </style>
 <script>
     var jq = jQuery;
@@ -52,8 +50,6 @@
             jq("#but_capture").click(); //Hide webcam after capture.
         });
 
-
-
         jq("#but_left").click(function (e) {
             if(image_pointer > 0) image_pointer--;
             jq("#patientimg").attr('src',folder+(filesList[image_pointer]).trim());
@@ -65,6 +61,23 @@
             jq("#patientimg").attr('src', folder+(filesList[image_pointer]).trim());
             jq("#file_date").text(filesList[image_pointer]);
         });
+
+        jq("#but_delete").click(function (e) {
+             jq.post("${ ui.actionLink("deleteImage")}", {
+                        returnFormat: 'json',
+                        patientId: "${patient.id}",
+                        type: "data",
+                        image: (filesList[image_pointer]).trim()
+                    },
+                    function (data) {
+                        response = data.message;
+                        jq("#responds").text(response);
+                    })
+                    .error(function () {
+                        //notifyError("Programmer error: delete identifier failed");
+                    });
+        });
+
 
         // Ref: http://www.xarg.org/project/jquery-webcam-plugin/
         jq(function () {
@@ -104,8 +117,7 @@
                                 },
                                 function (data) {
                                     response = data.message;
-                                    jQuery("#responds").empty();
-                                    jQuery("#responds").append(response);
+                                    jq("#responds").text(response);
                                 })
                                 .error(function () {
                                     //notifyError("Programmer error: delete identifier failed");
@@ -124,7 +136,7 @@
                     if (pos >= 4 * 320 * 240) {
                         jq.post("${ ui.actionLink("saveWebcam")}", {
                             returnFormat: 'json',
-                            patientID: "${patient.id}",
+                            patientId: "${patient.id}",
                             type: "pixel",
                             image: image.join('|')
                         });
@@ -168,8 +180,8 @@
 
     <!-- img tag -->
     <div id="file_date"></div>
-    <img alt="" id="patientimg" width="320"
-         src="../../moduleServlet/dermimage/ImageServlet?image=2016-05-25-20-29-56.png&patId=9" />
+    <img alt="" id="patientimg" width="320" height="240"
+         src="../../ms/uiframework/resource/dermimage/images/blank.png" />
 
 
     <!-- Web Cam -->

@@ -62,7 +62,7 @@ public class DermimageFragmentController {
     /**
      *
      * @param patientId as String
-     * @param type as String
+     * @param type as String   // Not implemented
      * @param image as String
      * @return Object with Message: Added
      * @should return object with the message added
@@ -92,7 +92,6 @@ public class DermimageFragmentController {
             }
 
 
-
         }
 
         SimpleObject o = SimpleObject.create("message","Image created!");
@@ -101,5 +100,25 @@ public class DermimageFragmentController {
     }
 
 
+    /**
+     *
+     * @param patientId as String
+     * @param image as String
+     * @return Object with Message: Added
+     * @should return object with the message added
+     */
+
+    public Object deleteImage(@RequestParam("patientId") String patientId,
+                             @RequestParam("image") String image) {
+
+        SimpleObject output;
+        File toDelete = new File(OpenmrsUtil.getApplicationDataDirectory() + "/patient_images/"+patientId.trim()+"/"+image.trim());
+        if(toDelete.delete()){
+            output = SimpleObject.create("message","Success");
+        }else{
+            output = SimpleObject.create("message","Error!");
+        }
+        return output;
+    }
 
 }

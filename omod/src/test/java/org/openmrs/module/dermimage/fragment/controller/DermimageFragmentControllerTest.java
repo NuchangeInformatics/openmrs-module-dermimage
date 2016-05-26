@@ -1,16 +1,19 @@
 package org.openmrs.module.dermimage.fragment.controller;
 
+import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.openmrs.api.PatientService;
 import org.openmrs.ui.framework.fragment.FragmentConfiguration;
 import org.openmrs.ui.framework.fragment.FragmentModel;
+import org.openmrs.util.OpenmrsUtil;
 import org.openmrs.web.test.BaseModuleWebContextSensitiveTest;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import java.io.File;
+
+import static org.junit.Assert.*;
 
 /**
  * Created by beapen on 25/05/16.
@@ -45,7 +48,28 @@ public class DermimageFragmentControllerTest extends BaseModuleWebContextSensiti
         assertTrue(mav.containsKey("listOfFiles"));
         assertTrue(mav.containsKey("numberOfFiles"));
         assertNotNull(mav.getAttribute("patient"));
+    }
 
+    @Test
+    public void shouldDeleteFile() throws Exception {
+        String sep = File.separator;
+        String patientId = "2";
+        String file = "test.png";
+        String path = OpenmrsUtil.getApplicationDataDirectory()
+                + sep +"patient_images"+sep+patientId+sep+file;
+        //System.out.println(path);
+        File imgDir = new File(OpenmrsUtil.getApplicationDataDirectory()
+                + sep +"patient_images"+sep+patientId+sep+file);
+        if (!imgDir.exists()) {
+            FileUtils.forceMkdir(imgDir);
+        }
+        DermimageFragmentController fragmentController =
+                (DermimageFragmentController) applicationContext.getBean("dermimageFragmentController");
+        Object data = fragmentController.deleteImage(patientId,file);
+        String message = data.toString();
+        //System.out.println(message);
+        assertNotNull(data);
+        assertEquals("File deletion Error.", "{message=Success}", message);
     }
 
 }
