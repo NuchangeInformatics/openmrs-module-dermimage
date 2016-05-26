@@ -59,4 +59,34 @@ put jetty-web.xml in openmrs/server/tmp/webapp/WEB-INF/jetty-web.xml with
 
 ## Important
 
-jQuery.post requires returnFormat: 'json' 
+* jQuery.post requires returnFormat: 'json' 
+* alt+enter on classname to create test in IntelliJ
+
+## Creating a test folder
+* copy path of the controller directory
+* create new folder under src change main to test.
+* remove path before main.
+* File -> Project structure -> java folder as test src 
+* alt+enter on classname to create Test
+* add extends BaseModuleWebContextSensitiveTest 
+* ADD to webModuleApplicationContext.xml
+
+```
+<bean id="dermimageFragmentController"
+		  class="org.openmrs.module.dermimage.fragment.controller.DermimageFragmentController"/>
+		  
+```
+		  
+* Use text cases PatientId 2
+
+## How to create a servlet
+* create a folder servlet under omod/src/java at same level as page, fragment, web and extension.
+* Add servlet defenition to <config class="xml"></config>
+
+```
+<servlet>
+        <servlet-name>ImageServlet</servlet-name>
+        <servlet-class>${project.parent.groupId}.${project.parent.artifactId}.servlet.ImageServlet</servlet-class>
+    </servlet>
+```
+Access servlet as: src="../../moduleServlet/dermimage/ImageServlet

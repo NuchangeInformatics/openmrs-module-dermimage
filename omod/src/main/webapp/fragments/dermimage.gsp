@@ -18,26 +18,71 @@
     margin-bottom: 50px;
 }
 
-
-
 </style>
 <script>
     var jq = jQuery;
+    var image_pointer = 0;
+    var folder = "../../moduleServlet/dermimage/ImageServlet?patId=${patient.id}&image=";
+    var filesList = "${listOfFiles}";
+    var num_files = ${numberOfFiles};
+
+
+    // File list
+    filesList = filesList.slice(1,-1);
+    filesList = filesList.split(",");
+
+
     jq(document).ready(function () {
+
         jq("#webcam").hide();
         jq("#but_webcam_upload").hide();
+        jq("#upload_form").hide();
 
         jq("#but_capture").click(function (e) {
             jq("#webcam").toggle();
-            jq("#myCanvas").toggle();
+            jq("#patientimg").toggle();
             jq("#but_webcam_upload").toggle();
             jq("#but_upload").toggle();
-        });
-
+         });
 
         jq("#but_webcam_upload").click(function (e) {
             webcam.capture();
+            jq("#upload_form").hide();
+            jq("#but_capture").click(); //Hide webcam after capture.
         });
+
+        jq("#but_upload").click(function (e) {
+            jq("#upload_form").show();
+        });
+
+        jq("#but_left").click(function (e) {
+            if(image_pointer > 0) image_pointer--;
+            jq("#patientimg").attr('src',folder+(filesList[image_pointer]).trim());
+            jq("#file_date").text(filesList[image_pointer]);
+        });
+
+        jq("#but_right").click(function (e) {
+            if(image_pointer < num_files-1) image_pointer++;
+            jq("#patientimg").attr('src', folder+(filesList[image_pointer]).trim());
+            jq("#file_date").text(filesList[image_pointer]);
+        });
+
+        jq("#but_delete").click(function (e) {
+             jq.post("${ ui.actionLink("deleteImage")}", {
+                        returnFormat: 'json',
+                        patientId: "${patient.id}",
+                        type: "data",
+                        image: (filesList[image_pointer]).trim()
+                    },
+                    function (data) {
+                        response = data.message;
+                        jq("#responds").text(response);
+                    })
+                    .error(function () {
+                        //notifyError("Programmer error: delete identifier failed");
+                    });
+        });
+
 
         // Ref: http://www.xarg.org/project/jquery-webcam-plugin/
         jq(function () {
@@ -77,8 +122,7 @@
                                 },
                                 function (data) {
                                     response = data.message;
-                                    jQuery("#responds").empty();
-                                    jQuery("#responds").append(response);
+                                    jq("#responds").text(response);
                                 })
                                 .error(function () {
                                     //notifyError("Programmer error: delete identifier failed");
@@ -97,7 +141,7 @@
                     if (pos >= 4 * 320 * 240) {
                         jq.post("${ ui.actionLink("saveWebcam")}", {
                             returnFormat: 'json',
-                            patientID: "${patient.id}",
+                            patientId: "${patient.id}",
                             type: "pixel",
                             image: image.join('|')
                         });
@@ -135,9 +179,15 @@
 
         <h3>CLINICAL IMAGES</h3>
     </div>
-    <!-- Canvas -->
+    <!-- Canvas
     <canvas id="myCanvas" width="320" height="240" style="border:1px solid #000000;">
-    </canvas>
+    </canvas> -->
+
+    <!-- img tag -->
+    <div id="file_date"></div>
+    <img alt="" id="patientimg" width="320" height="240"
+         src="../../ms/uiframework/resource/dermimage/images/blank.png" />
+
 
     <!-- Web Cam -->
     <div id="webcam"></div>
@@ -163,6 +213,16 @@
         <i class="icon-remove"></i>
     </a>
 
+    <!-- Upload form -->
+    <div id="upload_form">
+        <form method="post" action="../../moduleServlet/dermimage/UploadServlet?patientId=${patient.id}" enctype="multipart/form-data">
+            Select Image to upload:
+            <input type="file" name="dataFile" id="fileChooser" />
+            <!--<input type="hidden" name="patientId" value="${patient.id}" />-->
+            <input type="submit" value="Upload" />
+        </form>
+
+    </div>
     <!-- Messages -->
     <div id="responds"></div>
 </div>
