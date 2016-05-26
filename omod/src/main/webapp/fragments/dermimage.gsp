@@ -21,6 +21,7 @@
 
 
 </style>
+<img alt="" id="patientimg" height="200" src="../../moduleServlet/dermimage/ImageServlet?image=2016-05-25-20-29-56.png&id=9" />
 <h3>${folder} <br>${listOfFiles} <br> ${numberOfFiles}</h3>
 <script>
     var jq = jQuery;

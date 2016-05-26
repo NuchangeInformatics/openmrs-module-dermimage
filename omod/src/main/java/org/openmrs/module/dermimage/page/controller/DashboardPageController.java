@@ -1,4 +1,4 @@
-package org.openmrs.module.skinhelpdesk.page.controller;
+package org.openmrs.module.dermimage.page.controller;
 
 /**
  * Created by beapen on 28/12/15.
