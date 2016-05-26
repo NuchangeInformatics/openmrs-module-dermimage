@@ -25,7 +25,7 @@
 <script>
     var jq = jQuery;
     var image_pointer = 0;
-    var folder = "${folder}";
+    var folder = "${folder}/";
     var filesList = "${listOfFiles}";
     var num_files = ${numberOfFiles};
     // File list
@@ -34,16 +34,18 @@
 
 
     //Ref: http://www.williammalone.com/briefs/how-to-draw-image-html5-canvas/
-    function drawImage() {
+    function drawImage(image) {
         var context = document.getElementById('myCanvas').getContext("2d");
-        var file = folder+'/'+filesList[image_pointer];
-        alert(file);
+        //var file = folder+'/'+filesList[image_pointer];
+        //alert(file);
         var img = new Image();
         img.onload = function () {
             context.drawImage(img, 0, 0, 320, 240);
         };
-        img.src = file;
+        img.src = image;
     }
+
+
     jq(document).ready(function () {
 
         jq("#webcam").hide();
@@ -66,12 +68,26 @@
 
         jq("#but_left").click(function (e) {
             if(image_pointer > 0) image_pointer--;
-            drawImage();
+            jq.post('${ ui.actionLink("postImage") }', { returnFormat: 'json', filePath: folder, fileName: filesList[image_pointer] },
+                    function(data) {
+                        response = data.image;
+                        drawImage(response);
+                    })
+                    .error(function() {
+                        //notifyError("Programmer error: delete identifier failed");
+                    })
         });
 
         jq("#but_right").click(function (e) {
             if(image_pointer < num_files) image_pointer++;
-            drawImage();
+            jq.post('${ ui.actionLink("postImage") }', { returnFormat: 'json', filePath: folder, fileName: filesList[image_pointer] },
+                    function(data) {
+                        response = data.image;
+                        drawImage(response);
+                    })
+                    .error(function() {
+                        //notifyError("Programmer error: delete identifier failed");
+                    })
         });
 
         // Ref: http://www.xarg.org/project/jquery-webcam-plugin/

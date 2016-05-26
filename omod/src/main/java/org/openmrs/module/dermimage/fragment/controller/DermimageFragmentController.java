@@ -2,6 +2,7 @@ package org.openmrs.module.dermimage.fragment.controller;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.openmrs.Patient;
 import org.openmrs.api.PatientService;
 import org.openmrs.ui.framework.SimpleObject;
@@ -15,6 +16,7 @@ import sun.misc.BASE64Decoder;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -96,6 +98,40 @@ public class DermimageFragmentController {
         }
 
         SimpleObject o = SimpleObject.create("message","Image created!");
+
+        return o;
+    }
+
+    /**
+     *
+     * @param filePath as String
+     * @param fileName as String
+     * @return Object with Message: Added
+     * @should return object with the message added
+     */
+
+    public Object postImage(@RequestParam(value = "filePath", required=true) String filePath,
+                           @RequestParam(value = "fileName", required=true) String fileName) {
+
+        //Ref: http://stackoverflow.com/questions/10391170/serialize-image-to-a-string
+        File image = new File(filePath, fileName);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ObjectOutputStream oos = null;
+        try {
+            oos = new ObjectOutputStream(baos);
+            oos.writeObject(image);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        byte[] theBytes = baos.toByteArray();
+        StringBuffer buf = new StringBuffer();
+        for (byte b : theBytes) {
+            buf.append((char) b); // cast to char, then append
+        }
+        String imgString = buf.toString();
+
+        SimpleObject o = SimpleObject.create("image",imgString);
 
         return o;
     }
