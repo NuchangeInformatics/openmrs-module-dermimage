@@ -36,18 +36,23 @@
 
         jq("#webcam").hide();
         jq("#but_webcam_upload").hide();
+        jq("#upload_form").hide();
 
         jq("#but_capture").click(function (e) {
             jq("#webcam").toggle();
             jq("#patientimg").toggle();
             jq("#but_webcam_upload").toggle();
             jq("#but_upload").toggle();
-        });
-
+         });
 
         jq("#but_webcam_upload").click(function (e) {
             webcam.capture();
+            jq("#upload_form").hide();
             jq("#but_capture").click(); //Hide webcam after capture.
+        });
+
+        jq("#but_upload").click(function (e) {
+            jq("#upload_form").show();
         });
 
         jq("#but_left").click(function (e) {
@@ -208,6 +213,16 @@
         <i class="icon-remove"></i>
     </a>
 
+    <!-- Upload form -->
+    <div id="upload_form">
+        <form method="post" action="../../moduleServlet/dermimage/UploadServlet?patientId=${patient.id}" enctype="multipart/form-data">
+            Select Image to upload:
+            <input type="file" name="dataFile" id="fileChooser" />
+            <!--<input type="hidden" name="patientId" value="${patient.id}" />-->
+            <input type="submit" value="Upload" />
+        </form>
+
+    </div>
     <!-- Messages -->
     <div id="responds"></div>
 </div>
