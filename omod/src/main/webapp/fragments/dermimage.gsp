@@ -21,30 +21,17 @@
 
 
 </style>
-<img alt="" id="patientimg" height="200" src="../../moduleServlet/dermimage/ImageServlet?image=2016-05-25-20-29-56.png&id=9" />
-<h3>${folder} <br>${listOfFiles} <br> ${numberOfFiles}</h3>
 <script>
     var jq = jQuery;
     var image_pointer = 0;
-    var folder = "${folder}/";
+    var folder = "../../moduleServlet/dermimage/ImageServlet?patId=${patient.id}&image=";
     var filesList = "${listOfFiles}";
     var num_files = ${numberOfFiles};
+
+
     // File list
     filesList = filesList.slice(1,-1);
     filesList = filesList.split(",");
-
-
-    //Ref: http://www.williammalone.com/briefs/how-to-draw-image-html5-canvas/
-    function drawImage(image) {
-        var context = document.getElementById('myCanvas').getContext("2d");
-        //var file = folder+'/'+filesList[image_pointer];
-        //alert(file);
-        var img = new Image();
-        img.onload = function () {
-            context.drawImage(img, 0, 0, 320, 240);
-        };
-        img.src = image;
-    }
 
 
     jq(document).ready(function () {
@@ -54,7 +41,7 @@
 
         jq("#but_capture").click(function (e) {
             jq("#webcam").toggle();
-            jq("#myCanvas").toggle();
+            jq("#patientimg").toggle();
             jq("#but_webcam_upload").toggle();
             jq("#but_upload").toggle();
         });
@@ -62,33 +49,21 @@
 
         jq("#but_webcam_upload").click(function (e) {
             webcam.capture();
-            jq("#but_capture").click();
+            jq("#but_capture").click(); //Hide webcam after capture.
         });
 
 
 
         jq("#but_left").click(function (e) {
             if(image_pointer > 0) image_pointer--;
-            jq.post('${ ui.actionLink("postImage") }', { returnFormat: 'json', filePath: folder, fileName: filesList[image_pointer] },
-                    function(data) {
-                        response = data.image;
-                        drawImage(response);
-                    })
-                    .error(function() {
-                        //notifyError("Programmer error: delete identifier failed");
-                    })
+            jq("#patientimg").attr('src',folder+(filesList[image_pointer]).trim());
+            jq("#file_date").text(filesList[image_pointer]);
         });
 
         jq("#but_right").click(function (e) {
-            if(image_pointer < num_files) image_pointer++;
-            jq.post('${ ui.actionLink("postImage") }', { returnFormat: 'json', filePath: folder, fileName: filesList[image_pointer] },
-                    function(data) {
-                        response = data.image;
-                        drawImage(response);
-                    })
-                    .error(function() {
-                        //notifyError("Programmer error: delete identifier failed");
-                    })
+            if(image_pointer < num_files-1) image_pointer++;
+            jq("#patientimg").attr('src', folder+(filesList[image_pointer]).trim());
+            jq("#file_date").text(filesList[image_pointer]);
         });
 
         // Ref: http://www.xarg.org/project/jquery-webcam-plugin/
@@ -187,9 +162,15 @@
 
         <h3>CLINICAL IMAGES</h3>
     </div>
-    <!-- Canvas -->
+    <!-- Canvas
     <canvas id="myCanvas" width="320" height="240" style="border:1px solid #000000;">
-    </canvas>
+    </canvas> -->
+
+    <!-- img tag -->
+    <div id="file_date"></div>
+    <img alt="" id="patientimg" width="320"
+         src="../../moduleServlet/dermimage/ImageServlet?image=2016-05-25-20-29-56.png&patId=9" />
+
 
     <!-- Web Cam -->
     <div id="webcam"></div>

@@ -20,22 +20,34 @@ public class ImageServlet extends HttpServlet {
     // Properties ---------------------------------------------------------------------------------
     private String imagePath;
 
+    private static void close(Closeable resource) {
+        if (resource != null) {
+            try {
+                resource.close();
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     @Override
     public void init() throws ServletException {
-        this.imagePath = OpenmrsUtil.getApplicationDataDirectory() + "/patient_images/9/";
+        this.imagePath = OpenmrsUtil.getApplicationDataDirectory() + "/patient_images/";
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String requestedImage = request.getParameter("image");
-        //String finalPath = imagePath+"/"+request.getParameter("id");
+        String patId = URLDecoder.decode(request.getParameter("patId"), "UTF-8").trim();
+        String finalPath = imagePath+patId;
 
         if (requestedImage == null) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
             return;
         }
 
-        File image = new File(imagePath, URLDecoder.decode(requestedImage, "UTF-8"));
+        File image = new File(finalPath, URLDecoder.decode(requestedImage, "UTF-8"));
         if (!image.exists()) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
             return;
@@ -68,17 +80,6 @@ public class ImageServlet extends HttpServlet {
         finally {
             close(output);
             close(input);
-        }
-    }
-
-    private static void close(Closeable resource) {
-        if (resource != null) {
-            try {
-                resource.close();
-            }
-            catch (IOException e) {
-                e.printStackTrace();
-            }
         }
     }
 }
