@@ -78,12 +78,14 @@ public class DermimageFragmentController {
             try {
                 BASE64Decoder decoder = new BASE64Decoder();
                 byte[] decodedBytes = decoder.decodeBuffer(image);
-                File imgDir = new File(OpenmrsUtil.getApplicationDataDirectory() + "/patient_images/"+patientId+"/");
+                String sep = File.separator;
+                File imgDir = new File(OpenmrsUtil.getApplicationDataDirectory() +
+                        sep + "patient_images" + sep + patientId + sep);
                 if (!imgDir.exists()) {
                     FileUtils.forceMkdir(imgDir);
                 }
                 String date = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(new Date());
-                FileOutputStream fos = new FileOutputStream(imgDir + "/"
+                FileOutputStream fos = new FileOutputStream(imgDir + sep
                         + date + ".png");
                 fos.write(decodedBytes);
                 fos.close();
@@ -112,7 +114,9 @@ public class DermimageFragmentController {
                              @RequestParam("image") String image) {
 
         SimpleObject output;
-        File toDelete = new File(OpenmrsUtil.getApplicationDataDirectory() + "/patient_images/"+patientId.trim()+"/"+image.trim());
+        String sep = File.separator;
+        File toDelete = new File(OpenmrsUtil.getApplicationDataDirectory() +
+                sep + "patient_images" + sep+ patientId.trim() + sep +image.trim());
         if(toDelete.delete()){
             output = SimpleObject.create("message","Success");
         }else{
