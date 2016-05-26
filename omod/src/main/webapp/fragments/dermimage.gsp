@@ -21,25 +21,31 @@
 
 
 </style>
-<h3>${debug}</h3>
+<h3>${folder} <br>${listOfFiles} <br> ${numberOfFiles}</h3>
 <script>
     var jq = jQuery;
     var image_pointer = 0;
-    var folder = ${folder};
-    var files = ${listOfFiles};
+    var folder = "${folder}";
+    var filesList = "${listOfFiles}";
     var num_files = ${numberOfFiles};
+    // File list
+    filesList = filesList.slice(1,-1);
+    filesList = filesList.split(",");
+
 
     //Ref: http://www.williammalone.com/briefs/how-to-draw-image-html5-canvas/
     function drawImage() {
         var context = document.getElementById('myCanvas').getContext("2d");
-
+        var file = folder+'/'+filesList[image_pointer];
+        alert(file);
         var img = new Image();
         img.onload = function () {
             context.drawImage(img, 0, 0, 320, 240);
         };
-        img.src = folder+files[image_pointer];
+        img.src = file;
     }
     jq(document).ready(function () {
+
         jq("#webcam").hide();
         jq("#but_webcam_upload").hide();
 
@@ -60,12 +66,12 @@
 
         jq("#but_left").click(function (e) {
             if(image_pointer > 0) image_pointer--;
-            //drawImage();
+            drawImage();
         });
 
         jq("#but_right").click(function (e) {
             if(image_pointer < num_files) image_pointer++;
-            //drawImage();
+            drawImage();
         });
 
         // Ref: http://www.xarg.org/project/jquery-webcam-plugin/
