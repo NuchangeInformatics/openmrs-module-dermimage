@@ -10,7 +10,8 @@ import java.io.*;
 import java.net.URLDecoder;
 
 /**
- * Created by beapen on 25/05/16.
+ * Original file from openmrs-module-patientimage
+ * Modified by beapen on 25/05/16.
  */
 public class ImageServlet extends HttpServlet {
 
@@ -38,7 +39,9 @@ public class ImageServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // Image data serialized as a String
         String requestedImage = request.getParameter("image");
+        // PatienId passed as a parameter
         String patId = URLDecoder.decode(request.getParameter("patId"), "UTF-8").trim();
         String finalPath = imagePath+patId;
 
