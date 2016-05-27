@@ -67,9 +67,10 @@ public class DermimageFragmentControllerTest extends BaseModuleWebContextSensiti
                 (DermimageFragmentController) applicationContext.getBean("dermimageFragmentController");
         Object data = fragmentController.deleteImage(patientId,file);
         String message = data.toString();
+        String success = "{message="+ DermimageFragmentController.MESSAGE_SUCCESS +"}";
         //System.out.println(message);
         assertNotNull(data);
-        assertEquals("File deletion Error.", "{message=Success}", message);
+        assertEquals("File deletion Error.", success, message);
     }
 
 }

@@ -1,5 +1,10 @@
 <%
     ui.includeJavascript("dermimage", "jquery.webcam.min.js")
+
+    ui.includeJavascript("uicommons", "angular.js")
+    ui.includeJavascript("uicommons", "ngDialog/ngDialog.js")
+    ui.includeCss("uicommons", "ngDialog/ngDialog.min.css")
+
 %>
 
 <style type="text/css">
@@ -37,6 +42,8 @@
         jq("#webcam").hide();
         jq("#but_webcam_upload").hide();
         jq("#upload_form").hide();
+        jq("#but_delete").hide();
+
 
         jq("#but_capture").click(function (e) {
             jq("#webcam").toggle();
@@ -59,12 +66,14 @@
             if(image_pointer > 0) image_pointer--;
             jq("#patientimg").attr('src',folder+(filesList[image_pointer]).trim());
             jq("#file_date").text(filesList[image_pointer]);
+            jq("#but_delete").show();
         });
 
         jq("#but_right").click(function (e) {
             if(image_pointer < num_files-1) image_pointer++;
             jq("#patientimg").attr('src', folder+(filesList[image_pointer]).trim());
             jq("#file_date").text(filesList[image_pointer]);
+            jq("#but_delete").show();
         });
 
         jq("#but_delete").click(function (e) {
@@ -75,11 +84,14 @@
                         image: (filesList[image_pointer]).trim()
                     },
                     function (data) {
-                        response = data.message;
-                        jq("#responds").text(response);
+                        if(data.indexOf("${MESSAGE_SUCCESS}")>=0){
+                            jq().toastmessage('showSuccessToast', "Image Deleted. Please Refresh Page");
+                        }else{
+                            jq().toastmessage('showErrorToast', "Error. Try again after page refresh");
+                        }
                     })
                     .error(function () {
-                        //notifyError("Programmer error: delete identifier failed");
+                        jq().toastmessage('showErrorToast', "Error. Try again after page refresh");
                     });
         });
 
@@ -121,18 +133,21 @@
                                     image: to_send
                                 },
                                 function (data) {
-                                    response = data.message;
-                                    jq("#responds").text(response);
+                                    if(data.indexOf("${MESSAGE_SUCCESS}")>=0){
+                                        jq().toastmessage('showSuccessToast', "Image Saved. Please Refresh Page");
+                                    }else{
+                                        jq().toastmessage('showErrorToast', "Error. Try again after page refresh");
+                                    }
                                 })
                                 .error(function () {
-                                    //notifyError("Programmer error: delete identifier failed");
+                                    jq().toastmessage('showErrorToast', "Error. Try again after page refresh");
                                 });
                         pos = 0;
                     }
                 };
 
             } else {
-
+                // Not implemented
                 saveCB = function (data) {
                     image.push(data);
 
@@ -179,9 +194,10 @@
 
         <h3>CLINICAL IMAGES</h3>
     </div>
-    <!-- Canvas
+    <!-- Canvas  if required
     <canvas id="myCanvas" width="320" height="240" style="border:1px solid #000000;">
-    </canvas> -->
+    </canvas>
+    -->
 
     <!-- img tag -->
     <div id="file_date"></div>

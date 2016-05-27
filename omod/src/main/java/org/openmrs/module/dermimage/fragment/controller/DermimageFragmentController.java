@@ -27,7 +27,8 @@ import java.util.Date;
  * Ref: https://github.com/openmrs/openmrs-module-orderentryui/blob/master/omod/src/main/java/org/openmrs/module/orderentryui/fragment/controller/patientdashboard/ActiveDrugOrdersFragmentController.java
  */
 public class DermimageFragmentController {
-
+    public static final String MESSAGE_SUCCESS = "success";
+    public static final String MESSAGE_ERROR = "error";
 
     public void controller(FragmentConfiguration config,
                            @SpringBean("patientService") PatientService patientService,
@@ -43,9 +44,11 @@ public class DermimageFragmentController {
             // in case we are passed a PatientDomainWrapper (but this module doesn't know about emrapi)
             patient = (Patient) (pt instanceof Patient ? pt : PropertyUtils.getProperty(pt, "patient"));
         }
-
-        File imgDir = new File(OpenmrsUtil.getApplicationDataDirectory() + "/patient_images/" +
-                patient.getPatientId().toString().trim() + "/");
+        String sep = File.separator;
+        // Folder in which images are saved
+        File imgDir = new File(OpenmrsUtil.getApplicationDataDirectory() +
+                sep + "patient_images" + sep +
+                patient.getPatientId().toString().trim() + sep);
 
         if (!imgDir.exists()) {
             FileUtils.forceMkdir(imgDir);
@@ -55,15 +58,15 @@ public class DermimageFragmentController {
         model.addAttribute("folder", imgDir);
         model.addAttribute("listOfFiles", fileNames);
         model.addAttribute("numberOfFiles", fileNames.size());
-
-     }
+        model.addAttribute("MESSAGE_SUCCESS",MESSAGE_SUCCESS);
+        model.addAttribute("MESSAGE_ERROR",MESSAGE_ERROR);
+    }
 
 
     /**
-     *
      * @param patientId as String
-     * @param type as String   // Not implemented
-     * @param image as String
+     * @param type      as String   // Not implemented
+     * @param image     as String
      * @return Object with Message: Added
      * @should return object with the message added
      */
@@ -71,8 +74,9 @@ public class DermimageFragmentController {
     public Object saveWebcam(@RequestParam("patientId") String patientId,
                              @RequestParam("type") String type,
                              @RequestParam("image") String image) {
-
-
+        // type (pixel data / serialized string) is not implemented
+        // Always serialized string
+        SimpleObject output = new SimpleObject();
         if (image != null) {
 
             try {
@@ -89,38 +93,37 @@ public class DermimageFragmentController {
                         + date + ".png");
                 fos.write(decodedBytes);
                 fos.close();
+                output.put("message",MESSAGE_SUCCESS);
             } catch (IOException e) {
                 e.printStackTrace();
+                output.put("message",MESSAGE_ERROR);
             }
 
 
         }
 
-        SimpleObject o = SimpleObject.create("message","Image created!");
-
-        return o;
+        return output;
     }
 
 
     /**
-     *
      * @param patientId as String
-     * @param image as String
+     * @param image     as String
      * @return Object with Message: Added
      * @should return object with the message added
      */
 
     public Object deleteImage(@RequestParam("patientId") String patientId,
-                             @RequestParam("image") String image) {
+                              @RequestParam("image") String image) {
 
         SimpleObject output;
         String sep = File.separator;
         File toDelete = new File(OpenmrsUtil.getApplicationDataDirectory() +
-                sep + "patient_images" + sep+ patientId.trim() + sep +image.trim());
-        if(toDelete.delete()){
-            output = SimpleObject.create("message","Success");
-        }else{
-            output = SimpleObject.create("message","Error!");
+                sep + "patient_images" + sep + patientId.trim() + sep + image.trim());
+        if (toDelete.delete()) {
+            output = SimpleObject.create("message", MESSAGE_SUCCESS);
+        } else {
+            output = SimpleObject.create("message", MESSAGE_ERROR);
         }
         return output;
     }
