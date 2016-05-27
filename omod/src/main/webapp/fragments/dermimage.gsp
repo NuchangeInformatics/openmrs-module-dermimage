@@ -1,5 +1,9 @@
 <%
     ui.includeJavascript("dermimage", "jquery.webcam.min.js")
+
+    ui.includeJavascript("uicommons", "ngDialog/ngDialog.js")
+    ui.includeCss("uicommons", "ngDialog/ngDialog.min.css")
+
 %>
 
 <style type="text/css">
