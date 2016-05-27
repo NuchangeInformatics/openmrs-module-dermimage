@@ -43,9 +43,11 @@ public class DermimageFragmentController {
             // in case we are passed a PatientDomainWrapper (but this module doesn't know about emrapi)
             patient = (Patient) (pt instanceof Patient ? pt : PropertyUtils.getProperty(pt, "patient"));
         }
-
-        File imgDir = new File(OpenmrsUtil.getApplicationDataDirectory() + "/patient_images/" +
-                patient.getPatientId().toString().trim() + "/");
+        String sep = File.separator;
+        // Folder in which images are saved
+        File imgDir = new File(OpenmrsUtil.getApplicationDataDirectory() +
+                sep + "patient_images" + sep +
+                patient.getPatientId().toString().trim() + sep);
 
         if (!imgDir.exists()) {
             FileUtils.forceMkdir(imgDir);
@@ -56,14 +58,13 @@ public class DermimageFragmentController {
         model.addAttribute("listOfFiles", fileNames);
         model.addAttribute("numberOfFiles", fileNames.size());
 
-     }
+    }
 
 
     /**
-     *
      * @param patientId as String
-     * @param type as String   // Not implemented
-     * @param image as String
+     * @param type      as String   // Not implemented
+     * @param image     as String
      * @return Object with Message: Added
      * @should return object with the message added
      */
@@ -71,8 +72,8 @@ public class DermimageFragmentController {
     public Object saveWebcam(@RequestParam("patientId") String patientId,
                              @RequestParam("type") String type,
                              @RequestParam("image") String image) {
-
-
+        // type (pixel data / serialized string) is not implemented
+        // Always serialized string
         if (image != null) {
 
             try {
@@ -96,31 +97,30 @@ public class DermimageFragmentController {
 
         }
 
-        SimpleObject o = SimpleObject.create("message","Image created!");
+        SimpleObject o = SimpleObject.create("message", "Image created!");
 
         return o;
     }
 
 
     /**
-     *
      * @param patientId as String
-     * @param image as String
+     * @param image     as String
      * @return Object with Message: Added
      * @should return object with the message added
      */
 
     public Object deleteImage(@RequestParam("patientId") String patientId,
-                             @RequestParam("image") String image) {
+                              @RequestParam("image") String image) {
 
         SimpleObject output;
         String sep = File.separator;
         File toDelete = new File(OpenmrsUtil.getApplicationDataDirectory() +
-                sep + "patient_images" + sep+ patientId.trim() + sep +image.trim());
-        if(toDelete.delete()){
-            output = SimpleObject.create("message","Success");
-        }else{
-            output = SimpleObject.create("message","Error!");
+                sep + "patient_images" + sep + patientId.trim() + sep + image.trim());
+        if (toDelete.delete()) {
+            output = SimpleObject.create("message", "Success");
+        } else {
+            output = SimpleObject.create("message", "Error!");
         }
         return output;
     }
