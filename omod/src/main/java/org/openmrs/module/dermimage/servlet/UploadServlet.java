@@ -34,7 +34,7 @@ public class UploadServlet extends HttpServlet {
         //Separator
         String sep = File.separator;
 
-        //PatientId
+        //PatientId passed as a parameter
         String patientId = URLDecoder.decode(request.getParameter("patientId"), "UTF-8").trim();
 
         // Check that we have a file upload request
@@ -57,7 +57,7 @@ public class UploadServlet extends HttpServlet {
         factory.setRepository(new File(System.getProperty("java.io.tmpdir")));
 
         // constructs the folder where uploaded file will be stored
-         String uploadFolder = OpenmrsUtil.getApplicationDataDirectory() +
+        String uploadFolder = OpenmrsUtil.getApplicationDataDirectory() +
                 sep + "patient_images" + sep + patientId + sep;
 
         // Create a new file upload handler
@@ -86,18 +86,18 @@ public class UploadServlet extends HttpServlet {
             // displays referrer page after upload finished
             // Ref Stackoverflow 16752779
             HttpSession session = request.getSession();
-            if(session !=null){
+            if (session != null) {
                 session.invalidate();
                 RequestDispatcher rd;
                 String referrer = request.getHeader("Referer");
-                if(referrer!=null){
+                if (referrer != null) {
                     URL ref = new URL(referrer);
                     referrer = ref.getPath().substring(request.getContextPath().length());
                     rd = request.getRequestDispatcher(referrer);
-                }else{
+                } else {
                     rd = request.getRequestDispatcher("/index.htm");
                 }
-                rd.forward(request,response);
+                rd.forward(request, response);
             }
             //getServletContext().getRequestDispatcher("/done.jsp").forward(request, response);
 
