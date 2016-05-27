@@ -27,7 +27,8 @@ import java.util.Date;
  * Ref: https://github.com/openmrs/openmrs-module-orderentryui/blob/master/omod/src/main/java/org/openmrs/module/orderentryui/fragment/controller/patientdashboard/ActiveDrugOrdersFragmentController.java
  */
 public class DermimageFragmentController {
-
+    public static final String MESSAGE_SUCCESS = "success";
+    public static final String MESSAGE_ERROR = "error";
 
     public void controller(FragmentConfiguration config,
                            @SpringBean("patientService") PatientService patientService,
@@ -57,7 +58,8 @@ public class DermimageFragmentController {
         model.addAttribute("folder", imgDir);
         model.addAttribute("listOfFiles", fileNames);
         model.addAttribute("numberOfFiles", fileNames.size());
-
+        model.addAttribute("MESSAGE_SUCCESS",MESSAGE_SUCCESS);
+        model.addAttribute("MESSAGE_ERROR",MESSAGE_ERROR);
     }
 
 
@@ -74,6 +76,7 @@ public class DermimageFragmentController {
                              @RequestParam("image") String image) {
         // type (pixel data / serialized string) is not implemented
         // Always serialized string
+        SimpleObject output = new SimpleObject();
         if (image != null) {
 
             try {
@@ -90,16 +93,16 @@ public class DermimageFragmentController {
                         + date + ".png");
                 fos.write(decodedBytes);
                 fos.close();
+                output.put("message",MESSAGE_SUCCESS);
             } catch (IOException e) {
                 e.printStackTrace();
+                output.put("message",MESSAGE_ERROR);
             }
 
 
         }
 
-        SimpleObject o = SimpleObject.create("message", "Image created!");
-
-        return o;
+        return output;
     }
 
 
@@ -118,9 +121,9 @@ public class DermimageFragmentController {
         File toDelete = new File(OpenmrsUtil.getApplicationDataDirectory() +
                 sep + "patient_images" + sep + patientId.trim() + sep + image.trim());
         if (toDelete.delete()) {
-            output = SimpleObject.create("message", "Success");
+            output = SimpleObject.create("message", MESSAGE_SUCCESS);
         } else {
-            output = SimpleObject.create("message", "Error!");
+            output = SimpleObject.create("message", MESSAGE_ERROR);
         }
         return output;
     }
