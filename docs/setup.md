@@ -90,3 +90,11 @@ put jetty-web.xml in openmrs/server/tmp/webapp/WEB-INF/jetty-web.xml with
     </servlet>
 ```
 Access servlet as: src="../../moduleServlet/dermimage/ImageServlet
+
+## Steps in releasing a module while using gitflow
+* Finish Feature  (Now in develop)
+* mvn release:branch -DbranchName=feature/featureBranch
+* mvn release:clean
+* Start release
+* Finish release
+* Push to repository
