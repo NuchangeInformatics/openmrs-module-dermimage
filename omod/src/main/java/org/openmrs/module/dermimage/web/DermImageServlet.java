@@ -1,4 +1,4 @@
-package org.openmrs.module.dermimage.servlet;
+package org.openmrs.module.dermimage.web;
 
 import org.openmrs.util.OpenmrsUtil;
 
@@ -13,7 +13,7 @@ import java.net.URLDecoder;
  * Original file from openmrs-module-patientimage
  * Modified by beapen on 25/05/16.
  */
-public class ImageServlet extends HttpServlet {
+public class DermImageServlet extends HttpServlet {
 
     // Constants ----------------------------------------------------------------------------------
     private static final int DEFAULT_BUFFER_SIZE = 102400; // 100KB.

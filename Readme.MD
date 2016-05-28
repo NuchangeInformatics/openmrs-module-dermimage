@@ -19,7 +19,7 @@ Please check out [skinhelpdesk module here](https://github.com/dermatologist/ope
 In the future releases, expect the [image tagging](http://docpg.co.in/estore/downloads/dermatology-image-tagger/) and [skin tone](http://gulfdoctor.net/charm/) analysis option. 
 
 ## How do I install and use this module?
-- [Download latest release](https://github.com/dermatologist/openmrs-module-dermimage/releases). Upload omod to OpenMRS.
+- [Download latest release](https://modules.openmrs.org/#/show/256/clinical-images). Upload omod to OpenMRS.
 - Watch this video: [http://nuchange.ca/openmrs-module-dermimage-video](http://nuchange.ca/openmrs-module-dermimage-video)
 
 ## Issues
