@@ -93,7 +93,15 @@ public class DermimageFragmentController {
                         + date + ".png");
                 fos.write(decodedBytes);
                 fos.close();
-                output.put("message",MESSAGE_SUCCESS);
+                // Check file size
+                File imgFile = new File(imgDir + sep
+                        + date + ".png");
+                double fileSizeInKb = imgFile.length()/1024;
+                if(fileSizeInKb > 10) {
+                    output.put("message", MESSAGE_SUCCESS);
+                }else{
+                    output.put("message",MESSAGE_ERROR);
+                }
             } catch (IOException e) {
                 e.printStackTrace();
                 output.put("message",MESSAGE_ERROR);

@@ -101,10 +101,10 @@ Access servlet as: src="../../moduleServlet/dermimage/ImageServlet
 
 ## Steps in releasing a module while using gitflow (New)
 * Finish Feature  (Now in develop)
-* Start new feature (Now in feature)
 * mvn release:prepare
 * mvn release:clean
 * Start release
 * Finish release
+* Start new feature (Now in feature)
 * Push to repository
 * Set new feature branch to tag commit
