@@ -1,5 +1,6 @@
 <%
     ui.includeJavascript("dermimage", "jquery.webcam.min.js")
+    ui.includeJavascript("dermimage", "jquery.forms.js")
 
     ui.includeJavascript("uicommons", "angular.js")
     ui.includeJavascript("uicommons", "ngDialog/ngDialog.js")
@@ -23,6 +24,27 @@
     margin-bottom: 50px;
 }
 
+#progressbox {
+    position: relative;
+    width: 400px;
+    border: 1px solid #ddd;
+    padding: 1px;
+    border-radius: 3px;
+}
+
+#progressbar {
+    background-color: lightblue;
+    width: 0%;
+    height: 20px;
+    border-radius: 4px;
+}
+
+#percent {
+    position: absolute;
+    display: inline-block;
+    top: 3px;
+    left: 48%;
+}
 </style>
 <script>
     var jq = jQuery;

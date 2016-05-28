@@ -4,17 +4,15 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.openmrs.module.dermimage.fragment.controller.DermimageFragmentController;
 import org.openmrs.util.OpenmrsUtil;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.net.URLDecoder;
 import java.util.Iterator;
 import java.util.List;
@@ -40,7 +38,13 @@ public class DermUploadServlet extends HttpServlet {
         // Check that we have a file upload request
         boolean isMultipart = ServletFileUpload.isMultipartContent(request);
 
+        // Ref Stackoverflow 4112686
+        response.setContentType("text/plain");  // Set content type of the response so that jQuery knows what it can expect.
+        response.setCharacterEncoding("UTF-8");
+
+
         if (!isMultipart) {
+            response.getWriter().write(DermimageFragmentController.MESSAGE_ERROR);
             return;
         }
 
@@ -84,26 +88,15 @@ public class DermUploadServlet extends HttpServlet {
             }
 
             // displays referrer page after upload finished
-            // Ref Stackoverflow 16752779
-            HttpSession session = request.getSession();
-            if (session != null) {
-                session.invalidate();
-                RequestDispatcher rd;
-                String referrer = request.getHeader("Referer");
-                if (referrer != null) {
-                    URL ref = new URL(referrer);
-                    referrer = ref.getPath().substring(request.getContextPath().length());
-                    rd = request.getRequestDispatcher(referrer);
-                } else {
-                    rd = request.getRequestDispatcher("/index.htm");
-                }
-                rd.forward(request, response);
-            }
+            // Ref Stackoverflow 4112686
+            response.getWriter().write(DermimageFragmentController.MESSAGE_SUCCESS);
             //getServletContext().getRequestDispatcher("/done.jsp").forward(request, response);
 
         } catch (FileUploadException ex) {
+            response.getWriter().write(DermimageFragmentController.MESSAGE_ERROR);
             throw new ServletException(ex);
         } catch (Exception ex) {
+            response.getWriter().write(DermimageFragmentController.MESSAGE_ERROR);
             throw new ServletException(ex);
         }
 
