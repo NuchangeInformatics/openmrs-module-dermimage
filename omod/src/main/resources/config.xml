@@ -27,11 +27,11 @@
 
 	<!-- Servlets -->
 	<servlet>
-		<servlet-name>ImageServlet</servlet-name>
+		<servlet-name>DermImageServlet</servlet-name>
 		<servlet-class>${project.parent.groupId}.${project.parent.artifactId}.web.DermImageServlet</servlet-class>
 	</servlet>
 	<servlet>
-		<servlet-name>UploadServlet</servlet-name>
+		<servlet-name>DermUploadServlet</servlet-name>
 		<servlet-class>${project.parent.groupId}.${project.parent.artifactId}.web.DermUploadServlet</servlet-class>
 	</servlet>
 

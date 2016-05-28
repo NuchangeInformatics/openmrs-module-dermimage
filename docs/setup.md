@@ -80,13 +80,13 @@ put jetty-web.xml in openmrs/server/tmp/webapp/WEB-INF/jetty-web.xml with
 * Use text cases PatientId 2
 
 ## How to create a servlet
-* create a folder servlet under omod/src/java at same level as page, fragment, web and extension.
-* Add servlet defenition to <config class="xml"></config>
+* Create servlet in the web folder.
+* Add servlet definition to <config class="xml"></config>
 
 ```
 <servlet>
         <servlet-name>ImageServlet</servlet-name>
-        <servlet-class>${project.parent.groupId}.${project.parent.artifactId}.servlet.ImageServlet</servlet-class>
+        <servlet-class>${project.parent.groupId}.${project.parent.artifactId}.web.ImageServlet</servlet-class>
     </servlet>
 ```
 Access servlet as: src="../../moduleServlet/dermimage/ImageServlet
