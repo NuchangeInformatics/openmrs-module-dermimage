@@ -11,7 +11,7 @@
 	<description>
 		${project.parent.description}
 	</description>
-	<updateURL>http://nuchange.ca/openmrs/${project.parent.artifactId}/update.rdf</updateURL>
+	<updateURL>https://modules.openmrs.org/modules/download/clinical-images/update.rdf</updateURL>
 	<require_version>${openMRSVersion}</require_version>
 	<!-- / Module Properties -->
 
@@ -27,12 +27,12 @@
 
 	<!-- Servlets -->
 	<servlet>
-		<servlet-name>ImageServlet</servlet-name>
-		<servlet-class>${project.parent.groupId}.${project.parent.artifactId}.servlet.ImageServlet</servlet-class>
+		<servlet-name>DermImageServlet</servlet-name>
+		<servlet-class>${project.parent.groupId}.${project.parent.artifactId}.web.DermImageServlet</servlet-class>
 	</servlet>
 	<servlet>
-		<servlet-name>UploadServlet</servlet-name>
-		<servlet-class>${project.parent.groupId}.${project.parent.artifactId}.servlet.UploadServlet</servlet-class>
+		<servlet-name>DermUploadServlet</servlet-name>
+		<servlet-class>${project.parent.groupId}.${project.parent.artifactId}.web.DermUploadServlet</servlet-class>
 	</servlet>
 
 	<!-- Adds link to admin page -->

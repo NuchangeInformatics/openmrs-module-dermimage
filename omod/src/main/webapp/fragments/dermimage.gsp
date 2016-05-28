@@ -1,5 +1,6 @@
 <%
     ui.includeJavascript("dermimage", "jquery.webcam.min.js")
+    ui.includeJavascript("dermimage", "jquery.form.js")
 
     ui.includeJavascript("uicommons", "angular.js")
     ui.includeJavascript("uicommons", "ngDialog/ngDialog.js")
@@ -23,11 +24,32 @@
     margin-bottom: 50px;
 }
 
+#progressbox {
+    position: relative;
+    width: 400px;
+    border: 1px solid #ddd;
+    padding: 1px;
+    border-radius: 3px;
+}
+
+#progressbar {
+    background-color: lightblue;
+    width: 0%;
+    height: 20px;
+    border-radius: 4px;
+}
+
+#percent {
+    position: absolute;
+    display: inline-block;
+    top: 3px;
+    left: 48%;
+}
 </style>
 <script>
     var jq = jQuery;
     var image_pointer = 0;
-    var folder = "../../moduleServlet/dermimage/ImageServlet?patId=${patient.id}&image=";
+    var folder = "../../moduleServlet/dermimage/DermImageServlet?patId=${patient.id}&image=";
     var filesList = "${listOfFiles}";
     var num_files = ${numberOfFiles};
 
@@ -38,6 +60,40 @@
 
 
     jq(document).ready(function () {
+
+        //Form Upload progressbar begin
+        var options = {
+            beforeSend : function() {
+                jq("#progressbox").show();
+                // clear everything
+                jq("#progressbar").width('0%');
+                jq("#message").empty();
+                jq("#percent").html("0%");
+            },
+            uploadProgress : function(event, position, total, percentComplete) {
+                jq("#progressbar").width(percentComplete + '%');
+                jq("#percent").html(percentComplete + '%');
+
+                // change message text to red after 50%
+                if (percentComplete > 50) {
+                    jq("#message").html("<font color='red'>File Upload is in progress</font>");
+                }
+            },
+            success : function() {
+                jq("#progressbar").width('100%');
+                jq("#percent").html('100%');
+            },
+            complete : function(response) {
+                jq("#message").html("<font color='blue'>Your file has been uploaded!</font>");
+                location.reload();
+            },
+            error : function() {
+                jq("#message").html("<font color='red'> ERROR: unable to upload files</font>");
+            }
+        };
+        jq("#UploadForm").ajaxForm(options);
+        //Form Upload progressbar end
+
 
         jq("#webcam").hide();
         jq("#but_webcam_upload").hide();
@@ -85,7 +141,8 @@
                     },
                     function (data) {
                         if(data.indexOf("${MESSAGE_SUCCESS}")>=0){
-                            jq().toastmessage('showSuccessToast', "Image Deleted. Please Refresh Page");
+                            jq().toastmessage('showSuccessToast', "Image Deleted.");
+                            location.reload();
                         }else{
                             jq().toastmessage('showErrorToast', "Error. Try again after page refresh");
                         }
@@ -134,9 +191,10 @@
                                 },
                                 function (data) {
                                     if(data.indexOf("${MESSAGE_SUCCESS}")>=0){
-                                        jq().toastmessage('showSuccessToast', "Image Saved. Please Refresh Page");
+                                        jq().toastmessage('showSuccessToast', "Image Saved.");
+                                        location.reload();
                                     }else{
-                                        jq().toastmessage('showErrorToast', "Error. Try again after page refresh");
+                                        jq().toastmessage('showErrorToast', "Error. Please try again");
                                     }
                                 })
                                 .error(function () {
@@ -231,13 +289,18 @@
 
     <!-- Upload form -->
     <div id="upload_form">
-        <form method="post" action="../../moduleServlet/dermimage/UploadServlet?patientId=${patient.id}" enctype="multipart/form-data">
+        <form id="UploadForm" method="post" action="../../moduleServlet/dermimage/DermUploadServlet?patientId=${patient.id}" enctype="multipart/form-data">
             Select Image to upload:
-            <input type="file" name="dataFile" id="fileChooser" />
+            <input type="file" size="60" id="myfile" name="myfile">
             <!--<input type="hidden" name="patientId" value="${patient.id}" />-->
             <input type="submit" value="Upload" />
+            <div id="progressbox">
+                <div id="progressbar"></div>
+                <div id="percent">0%</div>
+            </div>
+            <br />
+            <div id="message"></div>
         </form>
-
     </div>
     <!-- Messages -->
     <div id="responds"></div>
