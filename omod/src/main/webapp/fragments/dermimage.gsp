@@ -134,9 +134,10 @@
                                 },
                                 function (data) {
                                     if(data.indexOf("${MESSAGE_SUCCESS}")>=0){
-                                        jq().toastmessage('showSuccessToast', "Image Saved. Please Refresh Page");
+                                        jq().toastmessage('showSuccessToast', "Image Saved.");
+                                        location.reload();
                                     }else{
-                                        jq().toastmessage('showErrorToast', "Error. Try again after page refresh");
+                                        jq().toastmessage('showErrorToast', "Error. Please try again");
                                     }
                                 })
                                 .error(function () {
