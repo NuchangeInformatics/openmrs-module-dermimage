@@ -23,7 +23,7 @@ In the future releases, expect the [image tagging](http://docpg.co.in/estore/dow
 - Watch this video: [http://nuchange.ca/openmrs-module-dermimage-video](http://nuchange.ca/openmrs-module-dermimage-video)
 
 ## Issues
-* The webcam interface uploads a blank image initially. Hence capture multiple images before refresh.
+* The webcam interface uploads a blank image initially. Hence, please capture multiple images before refresh.
 * HTML5 canvas interface was not considered since latest chrome browser does not allow non-secure HTML5 capture.
 
 ## Credits

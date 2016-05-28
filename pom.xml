@@ -21,9 +21,9 @@
 	</organization>
 
 	<scm>
-		<connection>scm:git:git@github.com:openmrs/openmrs-module-dermimage.git</connection>
-		<developerConnection>scm:git:git@github.com:openmrs/openmrs-module-dermimage.git</developerConnection>
-		<url>https://github.com/openmrs/openmrs-module-dermimage</url>
+		<connection>scm:git:git@bitbucket.org:nuchange/openmrs-module-dermimage.git</connection>
+		<developerConnection>scm:git:git@bitbucket.org:nuchange/openmrs-module-dermimage.git</developerConnection>
+		<url>https://bitbucket.org/nuchange/openmrs-module-dermimage</url>
 	</scm>
 	
 	<properties>
