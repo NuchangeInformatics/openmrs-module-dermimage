@@ -27,7 +27,7 @@
 <script>
     var jq = jQuery;
     var image_pointer = 0;
-    var folder = "../../moduleServlet/dermimage/ImageServlet?patId=${patient.id}&image=";
+    var folder = "../../moduleServlet/dermimage/DermImageServlet?patId=${patient.id}&image=";
     var filesList = "${listOfFiles}";
     var num_files = ${numberOfFiles};
 
@@ -232,7 +232,7 @@
 
     <!-- Upload form -->
     <div id="upload_form">
-        <form method="post" action="../../moduleServlet/dermimage/UploadServlet?patientId=${patient.id}" enctype="multipart/form-data">
+        <form method="post" action="../../moduleServlet/dermimage/DermUploadServlet?patientId=${patient.id}" enctype="multipart/form-data">
             Select Image to upload:
             <input type="file" name="dataFile" id="fileChooser" />
             <!--<input type="hidden" name="patientId" value="${patient.id}" />-->

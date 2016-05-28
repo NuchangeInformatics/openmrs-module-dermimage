@@ -1,4 +1,4 @@
-package org.openmrs.module.dermimage.servlet;
+package org.openmrs.module.dermimage.web;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
@@ -20,9 +20,9 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * Servlet implementation class UploadServlet
+ * Servlet implementation class DermUploadServlet
  */
-public class UploadServlet extends HttpServlet {
+public class DermUploadServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     //private static final String DATA_DIRECTORY = "data";

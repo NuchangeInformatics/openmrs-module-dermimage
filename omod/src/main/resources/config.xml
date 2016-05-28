@@ -28,11 +28,11 @@
 	<!-- Servlets -->
 	<servlet>
 		<servlet-name>ImageServlet</servlet-name>
-		<servlet-class>${project.parent.groupId}.${project.parent.artifactId}.servlet.ImageServlet</servlet-class>
+		<servlet-class>${project.parent.groupId}.${project.parent.artifactId}.web.DermImageServlet</servlet-class>
 	</servlet>
 	<servlet>
 		<servlet-name>UploadServlet</servlet-name>
-		<servlet-class>${project.parent.groupId}.${project.parent.artifactId}.servlet.UploadServlet</servlet-class>
+		<servlet-class>${project.parent.groupId}.${project.parent.artifactId}.web.DermUploadServlet</servlet-class>
 	</servlet>
 
 	<!-- Adds link to admin page -->
