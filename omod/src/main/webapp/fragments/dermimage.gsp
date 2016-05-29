@@ -61,7 +61,8 @@
 
     jq(document).ready(function () {
 
-        //Form Upload progressbar begin
+        // Form Upload progressbar begin
+        // Ref: simplecodestuffs file-upload-with-progress-bar-using-jquery-in-servlet
         var options = {
             beforeSend : function() {
                 jq("#progressbox").show();
