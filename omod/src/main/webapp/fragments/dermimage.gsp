@@ -1,5 +1,5 @@
 <%
-    ui.includeJavascript("dermimage", "jquery.webcam.min.js")
+    ui.includeJavascript("dermimage", "webcam.js")
     ui.includeJavascript("dermimage", "jquery.form.js")
 
     ui.includeJavascript("uicommons", "angular.js")
@@ -46,6 +46,7 @@
     left: 48%;
 }
 </style>
+
 <script>
     var jq = jQuery;
     var image_pointer = 0;
@@ -61,7 +62,61 @@
 
     jq(document).ready(function () {
 
-        //Form Upload progressbar begin
+        // Detect if flash fallback has to be forced
+        // REF: STACKOVERFLOW 4565112
+        // Ref: https://pixlcore.com/read/WebcamJS
+        // Ref: https://github.com/jhuckaby/webcamjs
+        var flash = false;
+        var isChromium = window.chrome,
+                winNav = window.navigator,
+                vendorName = winNav.vendor,
+                isOpera = winNav.userAgent.indexOf("OPR") > -1,
+                isIEedge = winNav.userAgent.indexOf("Edge") > -1,
+                isIOSChrome = winNav.userAgent.match("CriOS");
+
+        if (window.location.protocol != "https:" && vendorName === "Google Inc." )
+            flash = true;
+
+        Webcam.set({
+            width: 320,
+            height: 240,
+            dest_width: 320,
+            dest_height: 240,
+            image_format: 'png',
+            jpeg_quality: 90,
+            force_flash: flash
+        });
+        Webcam.attach( '#webcam' );
+
+        function take_snapshot() {
+            Webcam.snap( function(data_uri) {
+                //document.getElementById('webcam_result').innerHTML = '<img width="320" height="240" src="'+data_uri+'"/>';
+                // Sanitize
+                var to_send = data_uri.replace('data:image/png;base64,', '');
+                jq.post("${ ui.actionLink("saveWebcam")}", {
+                            returnFormat: 'json',
+                            patientId: "${patient.id}",
+                            type: "data",
+                            image: to_send
+                        },
+                        function (data) {
+                            if(data.indexOf("${MESSAGE_SUCCESS}")>=0){
+                                jq().toastmessage('showSuccessToast', "Image Saved.");
+                                location.reload();
+                            }else{
+                                jq().toastmessage('showErrorToast', "Error. Please try again");
+                            }
+                        })
+                        .error(function () {
+                            jq().toastmessage('showErrorToast', "Error. Try again after page refresh");
+                        });
+            } );
+
+        }
+        ////////////////End of Wecam functions ////////////////////////////////////////
+
+        // Form Upload progressbar begin
+        // Ref: simplecodestuffs file-upload-with-progress-bar-using-jquery-in-servlet
         var options = {
             beforeSend : function() {
                 jq("#progressbox").show();
@@ -96,6 +151,7 @@
 
 
         jq("#webcam").hide();
+        jq("#responds").hide();
         jq("#but_webcam_upload").hide();
         jq("#upload_form").hide();
         jq("#but_delete").hide();
@@ -103,13 +159,14 @@
 
         jq("#but_capture").click(function (e) {
             jq("#webcam").toggle();
+            jq("#responds").toggle();
             jq("#patientimg").toggle();
             jq("#but_webcam_upload").toggle();
             jq("#but_upload").toggle();
          });
 
         jq("#but_webcam_upload").click(function (e) {
-            webcam.capture();
+            take_snapshot();
             jq("#upload_form").hide();
             jq("#but_capture").click(); //Hide webcam after capture.
         });
@@ -150,97 +207,6 @@
                     .error(function () {
                         jq().toastmessage('showErrorToast', "Error. Try again after page refresh");
                     });
-        });
-
-
-        // Ref: http://www.xarg.org/project/jquery-webcam-plugin/
-        jq(function () {
-            var pos = 0, ctx = null, saveCB, image = [];
-
-            var canvas = document.createElement("canvas");
-            canvas.setAttribute('width', 320);
-            canvas.setAttribute('height', 240);
-
-            if (canvas.toDataURL) {
-
-                ctx = canvas.getContext("2d");
-
-                image = ctx.getImageData(0, 0, 320, 240);
-
-                saveCB = function (data) {
-
-                    var col = data.split(";");
-                    var img = image;
-
-                    for (var i = 0; i < 320; i++) {
-                        var tmp = parseInt(col[i]);
-                        img.data[pos + 0] = (tmp >> 16) & 0xff;
-                        img.data[pos + 1] = (tmp >> 8) & 0xff;
-                        img.data[pos + 2] = tmp & 0xff;
-                        img.data[pos + 3] = 0xff;
-                        pos += 4;
-                    }
-                    var to_send = canvas.toDataURL("image/png").replace('data:image/png;base64,', '');
-                    if (pos >= 4 * 320 * 240) {
-                        ctx.putImageData(img, 0, 0);
-                        jq.post("${ ui.actionLink("saveWebcam")}", {
-                                    returnFormat: 'json',
-                                    patientId: "${patient.id}",
-                                    type: "data",
-                                    image: to_send
-                                },
-                                function (data) {
-                                    if(data.indexOf("${MESSAGE_SUCCESS}")>=0){
-                                        jq().toastmessage('showSuccessToast', "Image Saved.");
-                                        location.reload();
-                                    }else{
-                                        jq().toastmessage('showErrorToast', "Error. Please try again");
-                                    }
-                                })
-                                .error(function () {
-                                    jq().toastmessage('showErrorToast', "Error. Try again after page refresh");
-                                });
-                        pos = 0;
-                    }
-                };
-
-            } else {
-                // Not implemented
-                saveCB = function (data) {
-                    image.push(data);
-
-                    pos += 4 * 320;
-
-                    if (pos >= 4 * 320 * 240) {
-                        jq.post("${ ui.actionLink("saveWebcam")}", {
-                            returnFormat: 'json',
-                            patientId: "${patient.id}",
-                            type: "pixel",
-                            image: image.join('|')
-                        });
-                        pos = 0;
-                    }
-                };
-            }
-
-            jq("#webcam").webcam({
-
-                width: 320,
-                height: 240,
-                mode: "callback",
-                swffile: "../../ms/uiframework/resource/dermimage/scripts/jscam.swf",
-
-                onSave: saveCB,
-
-                onCapture: function () {
-                    webcam.save();
-                },
-
-                debug: function (type, string) {
-                    console.log(type + ": " + string);
-                }
-            });
-
         });
 
     });
@@ -303,5 +269,5 @@
         </form>
     </div>
     <!-- Messages -->
-    <div id="responds"></div>
+    <div id="responds"><small>Click the second (upload) button to capture.</small></div>
 </div>
