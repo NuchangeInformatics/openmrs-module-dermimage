@@ -1,5 +1,5 @@
 <%
-    ui.includeJavascript("dermimage", "jquery.webcam.min.js")
+    ui.includeJavascript("dermimage", "webcam.js")
     ui.includeJavascript("dermimage", "jquery.form.js")
 
     ui.includeJavascript("uicommons", "angular.js")
@@ -46,6 +46,54 @@
     left: 48%;
 }
 </style>
+<script language="JavaScript">
+    //REF: STACKOVERFLOW 4565112
+    var flash = false;
+    var isChromium = window.chrome,
+            winNav = window.navigator,
+            vendorName = winNav.vendor,
+            isOpera = winNav.userAgent.indexOf("OPR") > -1,
+            isIEedge = winNav.userAgent.indexOf("Edge") > -1,
+            isIOSChrome = winNav.userAgent.match("CriOS");
+
+    if (window.location.protocol != "https:" && vendorName === "Google Inc." )
+            flash = true;
+
+    Webcam.set({
+        width: 320,
+        height: 240,
+        dest_width: 640,
+        dest_height: 480,
+        image_format: 'jpeg',
+        jpeg_quality: 90,
+        force_flash: flash
+    });
+    Webcam.attach( '#webcam' );
+
+    function take_snapshot() {
+        Webcam.snap( function(data_uri) {
+            document.getElementById('webcam_result').innerHTML = '<img src="'+data_uri+'"/>';
+        } );
+        var to_send = data_uri.replace('data:image/png;base64,', '');
+        jq.post("${ ui.actionLink("saveWebcam")}", {
+                    returnFormat: 'json',
+                    patientId: "${patient.id}",
+                    type: "data",
+                    image: to_send
+                },
+                function (data) {
+                    if(data.indexOf("${MESSAGE_SUCCESS}")>=0){
+                        jq().toastmessage('showSuccessToast', "Image Saved.");
+                        location.reload();
+                    }else{
+                        jq().toastmessage('showErrorToast', "Error. Please try again");
+                    }
+                })
+                .error(function () {
+                    jq().toastmessage('showErrorToast', "Error. Try again after page refresh");
+                });
+    }
+</script>
 <script>
     var jq = jQuery;
     var image_pointer = 0;
@@ -110,7 +158,7 @@
          });
 
         jq("#but_webcam_upload").click(function (e) {
-            webcam.capture();
+            take_snapshot();
             jq("#upload_form").hide();
             jq("#but_capture").click(); //Hide webcam after capture.
         });
@@ -153,7 +201,7 @@
                     });
         });
 
-
+         /*
         // Ref: http://www.xarg.org/project/jquery-webcam-plugin/
         jq(function () {
             var pos = 0, ctx = null, saveCB, image = [];
@@ -243,7 +291,7 @@
             });
 
         });
-
+        */
     });
 </script>
 
@@ -266,6 +314,7 @@
 
     <!-- Web Cam -->
     <div id="webcam"></div>
+    <div id="webcam_result"></div>
 
     <!-- Buttons -->
 
