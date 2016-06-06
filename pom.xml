@@ -4,7 +4,7 @@
 
 	<groupId>org.openmrs.module</groupId>
 	<artifactId>dermimage</artifactId>
-	<version>3.0</version>
+	<version>3.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>Dermimage</name>
 	<description>Image capture, upload and tagging.</description>
