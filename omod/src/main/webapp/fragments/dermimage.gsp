@@ -67,6 +67,7 @@
         // Ref: https://pixlcore.com/read/WebcamJS
         // Ref: https://github.com/jhuckaby/webcamjs
         var flash = false;
+        var camera_to_be_initialized = true;
         var isChromium = window.chrome,
                 winNav = window.navigator,
                 vendorName = winNav.vendor,
@@ -76,17 +77,6 @@
 
         if (window.location.protocol != "https:" && vendorName === "Google Inc." )
             flash = true;
-
-        Webcam.set({
-            width: 320,
-            height: 240,
-            dest_width: 320,
-            dest_height: 240,
-            image_format: 'png',
-            jpeg_quality: 90,
-            force_flash: flash
-        });
-        Webcam.attach( '#webcam' );
 
         function take_snapshot() {
             Webcam.snap( function(data_uri) {
@@ -158,6 +148,22 @@
 
 
         jq("#but_capture").click(function (e) {
+            // Issue #1
+            // Attach webcam only when the capture button is clicked for the first time.
+            // Prevents webcam access request on every pageload.
+            if(camera_to_be_initialized) {
+                Webcam.set({
+                    width: 320,
+                    height: 240,
+                    dest_width: 320,
+                    dest_height: 240,
+                    image_format: 'png',
+                    jpeg_quality: 90,
+                    force_flash: flash
+                });
+                Webcam.attach('#webcam');
+                camera_to_be_initialized = false;
+            }
             jq("#webcam").toggle();
             jq("#responds").toggle();
             jq("#patientimg").toggle();
@@ -177,16 +183,21 @@
 
         jq("#but_left").click(function (e) {
             if(image_pointer > 0) image_pointer--;
-            jq("#patientimg").attr('src',folder+(filesList[image_pointer]).trim());
-            jq("#file_date").text(filesList[image_pointer]);
-            jq("#but_delete").show();
+            // Prevent showing blank image.
+            if(filesList[image_pointer].trim().length > 0) {
+                jq("#patientimg").attr('src', folder + (filesList[image_pointer]).trim());
+                jq("#file_date").text(filesList[image_pointer]);
+                jq("#but_delete").show();
+            }
         });
 
         jq("#but_right").click(function (e) {
             if(image_pointer < num_files-1) image_pointer++;
-            jq("#patientimg").attr('src', folder+(filesList[image_pointer]).trim());
-            jq("#file_date").text(filesList[image_pointer]);
-            jq("#but_delete").show();
+            if(filesList[image_pointer].trim().length > 0) {
+                jq("#patientimg").attr('src', folder + (filesList[image_pointer]).trim());
+                jq("#file_date").text(filesList[image_pointer]);
+                jq("#but_delete").show();
+            }
         });
 
         jq("#but_delete").click(function (e) {

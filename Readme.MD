@@ -29,4 +29,5 @@ In the future releases, expect the [image tagging](http://docpg.co.in/estore/dow
 * [webcam.js](https://github.com/jhuckaby/webcamjs) 
 
 ## Contact Me
-Visit [my blog](http://nuchange.ca).
+* Visit [my blog](http://nuchange.ca).
+* [Issues and Feature Requests](https://github.com/dermatologist/openmrs-module-dermimage/issues)
