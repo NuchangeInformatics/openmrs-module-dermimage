@@ -1,3 +1,6 @@
+## 3.5
+* Issue#1 resolved: The webcam is initialized on first 
+
 ## 2.1
 * Check for image captured from webcam. Prevents blank capture.
 * refresh page after webcam upload
