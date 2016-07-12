@@ -21,6 +21,9 @@ public class DermImageServlet extends HttpServlet {
     // Properties ---------------------------------------------------------------------------------
     private String imagePath;
 
+    //Separator
+    private String sep = File.separator;
+
     private static void close(Closeable resource) {
         if (resource != null) {
             try {
@@ -34,7 +37,7 @@ public class DermImageServlet extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
-        this.imagePath = OpenmrsUtil.getApplicationDataDirectory() + "/patient_images/";
+        this.imagePath = OpenmrsUtil.getApplicationDataDirectory() + sep + "patient_images" + sep;
     }
 
     @Override
