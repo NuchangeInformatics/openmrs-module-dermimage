@@ -2,6 +2,7 @@ package org.openmrs.module.dermimage.web;
 
 import org.openmrs.util.OpenmrsUtil;
 
+import javax.activation.MimetypesFileTypeMap;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -58,11 +59,15 @@ public class DermImageServlet extends HttpServlet {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
             return;
         }
-        String contentType = getServletContext().getMimeType(image.getName());
+
+        MimetypesFileTypeMap mimetypesFileTypeMap = new MimetypesFileTypeMap();
+        String contentType = mimetypesFileTypeMap.getContentType(image);
+
+/*        String contentType = getServletContext().getMimeType(image.getName());
         if (contentType == null || !contentType.startsWith("image")) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
             return;
-        }
+        }*/
 
         response.reset();
         response.setBufferSize(DEFAULT_BUFFER_SIZE);
