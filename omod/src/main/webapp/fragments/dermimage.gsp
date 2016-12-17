@@ -181,6 +181,13 @@
             jq("#upload_form").show();
         });
 
+        jq("#but_download").click(function (e) {
+            var src = jq("#patientimg").attr('src');
+            var a = jq('<a>').attr('href', src).attr('download',"dermimage.png").appendTo('body');
+            a[0].click();
+            a.remove();
+        });
+
         jq("#but_left").click(function (e) {
             if(image_pointer > 0) image_pointer--;
             // Prevent showing blank image.
@@ -259,6 +266,9 @@
     </a>
     <a class="button" id="but_right">
         <i class="icon-arrow-right"></i>
+    </a>
+    <a class="button" id="but_download">
+        <i class="icon-download-alt"></i>
     </a>
     <a class="button" id="but_delete">
         <i class="icon-remove"></i>
