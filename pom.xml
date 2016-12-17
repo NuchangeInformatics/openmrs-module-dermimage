@@ -4,7 +4,7 @@
 
 	<groupId>org.openmrs.module</groupId>
 	<artifactId>dermimage</artifactId>
-	<version>3.7-SNAPSHOT</version>
+	<version>3.8-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>Dermimage</name>
 	<description>Image capture, upload and tagging.</description>
@@ -24,7 +24,8 @@
 		<connection>scm:git:git@bitbucket.org:nuchange/openmrs-module-dermimage.git</connection>
 		<developerConnection>scm:git:git@bitbucket.org:nuchange/openmrs-module-dermimage.git</developerConnection>
 		<url>https://bitbucket.org/nuchange/openmrs-module-dermimage</url>
-	</scm>
+	  <tag>HEAD</tag>
+  </scm>
 	
 	<properties>
 		<openMRSVersion>1.9.7</openMRSVersion>
